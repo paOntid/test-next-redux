@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { END } from "redux-saga";
 import { getTodosApi } from "../../../http";
 import { wrapper } from "../../../store";
 import {
@@ -8,17 +9,18 @@ import {
 } from "../../../store/counter/Counter.action";
 import { IRootState } from "../../../store/Root.reducer";
 
-Todos.getInitialProps = wrapper.getServerSideProps((store) => async () => {
-  console.log(store);
+// Todos.getInitialProps = wrapper.getServerSideProps((store) => async () => {
+//   console.log(store);
 
-  const { dispatch } = store;
-  const response = await dispatch(getTodosAction());
-  await store.sagaTask?.toPromise();
+//   const { dispatch } = store;
+//   const response = await dispatch(getTodosAction());
+//   dispatch(END);
+//   await store.sagaTask?.toPromise();
 
-  console.log("response", response);
+//   console.log("response", response);
 
-  return { props: { data: response } };
-});
+//   return { props: { data: response } };
+// });
 
 // export const getServerSideProps = wrapper.getServerSideProps(
 //   ({ dispatch }) =>
@@ -26,27 +28,27 @@ Todos.getInitialProps = wrapper.getServerSideProps((store) => async () => {
 //       await dispatch(getTodosAction())
 // );
 
-// export async function getServerSideProps() {
-// Fetch data from external API
-// const data = { id: 1, title: "1" };
-// console.log("server data", data);
-// const response = await getTodosApi();
-// Pass data to the page via props
-// return { props: { data: response?.data } };
-// }
+export async function getServerSideProps() {
+  // Fetch data from external API
+  // const data = { id: 1, title: "1" };
+  // console.log("server data", data);
+  const response = await getTodosApi();
+  // Pass data to the page via props
+  return { props: { data: response?.data } };
+}
 
 export default function Todos({ data }: any) {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { todos } = useSelector((store: IRootState) => store.counter);
 
   console.log("data", data, todos);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     dispatch(setTodosAction(data));
-  //     throw new Error("");
-  //   }
-  // }, [data, dispatch]);
+  useEffect(() => {
+    if (data) {
+      dispatch(setTodosAction(data));
+      // throw new Error("");
+    }
+  }, [data, dispatch]);
 
   // useEffect(() => {
   // dispatch(getTodosAction());
