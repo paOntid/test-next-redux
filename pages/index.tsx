@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -24,6 +22,8 @@ const Home: NextPage = () => {
 
   const goToTodos = () => router.push("/unouthorized/todos");
 
+  const goToCategory = () => router.push("/unouthorized/category");
+
   return (
     <div className={styles.container}>
       <Head>
@@ -43,6 +43,7 @@ const Home: NextPage = () => {
 
         <button onClick={goToAbout}>To About Page</button>
         <button onClick={goToTodos}>To TODOS Page</button>
+        <button onClick={goToCategory}>To CATEGORY Page</button>
         {/* <Link href={"/unouthorized/todos"}>GO to aaa</Link> */}
       </main>
     </div>

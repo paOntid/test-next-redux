@@ -1,28 +1,30 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { END } from "redux-saga";
 import { getTodosApi } from "../../../http";
 import { wrapper } from "../../../store";
 import {
-  getCategoryRequestAction,
   getTodosAction,
   setTodosAction,
 } from "../../../store/counter/Counter.action";
 import { IRootState } from "../../../store/Root.reducer";
 
-export const getStaticProps = wrapper.getStaticProps((store) => async () => {
-  console.log("store", store);
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async () => {
+    console.log("store", store);
 
-  const { dispatch, getState } = store;
-  // const response = await dispatch(getTodosAction());
-  const response = await dispatch(getCategoryRequestAction());
-  dispatch(END);
-  await store.sagaTask?.toPromise();
+    const { dispatch, getState } = store;
+    const response = await dispatch(getTodosAction());
+    // const response = await dispatch(getCategoryRequestAction());
+    dispatch(END);
+    await store.sagaTask?.toPromise();
 
-  console.log("response", response, getState());
+    console.log("response", response, getState());
 
-  return { props: { data: response } };
-});
+    return { props: { data: response } };
+  }
+);
 
 // export const getServerSideProps = wrapper.getServerSideProps(
 //   ({ dispatch }) =>
@@ -37,8 +39,11 @@ export const getStaticProps = wrapper.getStaticProps((store) => async () => {
 // }
 
 export default function Todos({ data }: any) {
+  const router = useRouter();
   const dispatch = useDispatch();
-  const { todos, category } = useSelector((store: IRootState) => store.counter);
+  const { todos } = useSelector((store: IRootState) => store.counter);
+
+  const goToCategory = () => router.push("/unouthorized/category");
 
   console.log("data", data, todos);
 
@@ -59,20 +64,22 @@ export default function Todos({ data }: any) {
 
       {/* <div>id: {data.id}</div> */}
 
-      {/* <div>
+      <button onClick={goToCategory}>Category</button>
+
+      <div>
         {todos.map(({ id, title }) => (
           <div key={id}>
             <h6>id: {id}</h6>
             <h6>title: {title}</h6>
           </div>
         ))}
-      </div> */}
+      </div>
 
-      <ul>
+      {/* <ul>
         {category.map(({ id, name }) => (
           <li key={id}>{name}</li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
