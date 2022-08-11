@@ -1,5 +1,7 @@
+import { HYDRATE } from "next-redux-wrapper";
 import {
   DECREMENT,
+  GET_CATEGORY_SUCCESS,
   GET_TODOS_SUCCESS,
   INCREMENT,
   SET_TODOS,
@@ -9,6 +11,7 @@ import { CounterActionTypes, CounterState } from "./Counter.type";
 const initialState: CounterState = {
   count: 0,
   todos: [],
+  category: [],
 };
 
 export default function counterReducer(
@@ -24,6 +27,11 @@ export default function counterReducer(
       return { ...state, todos: action.payload };
     case SET_TODOS:
       return { ...state, todos: action.payload };
+    case HYDRATE:
+      console.log("HYDRATE");
+      return { ...state, ...action.payload?.counter };
+    case GET_CATEGORY_SUCCESS:
+      return { ...state, category: action.payload };
     default:
       return { ...state };
   }

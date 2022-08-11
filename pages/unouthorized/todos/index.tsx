@@ -4,23 +4,25 @@ import { END } from "redux-saga";
 import { getTodosApi } from "../../../http";
 import { wrapper } from "../../../store";
 import {
+  getCategoryRequestAction,
   getTodosAction,
   setTodosAction,
 } from "../../../store/counter/Counter.action";
 import { IRootState } from "../../../store/Root.reducer";
 
-// Todos.getInitialProps = wrapper.getServerSideProps((store) => async () => {
-//   console.log(store);
+export const getStaticProps = wrapper.getStaticProps((store) => async () => {
+  console.log("store", store);
 
-//   const { dispatch } = store;
-//   const response = await dispatch(getTodosAction());
-//   dispatch(END);
-//   await store.sagaTask?.toPromise();
+  const { dispatch, getState } = store;
+  // const response = await dispatch(getTodosAction());
+  const response = await dispatch(getCategoryRequestAction());
+  dispatch(END);
+  await store.sagaTask?.toPromise();
 
-//   console.log("response", response);
+  console.log("response", response, getState());
 
-//   return { props: { data: response } };
-// });
+  return { props: { data: response } };
+});
 
 // export const getServerSideProps = wrapper.getServerSideProps(
 //   ({ dispatch }) =>
@@ -28,27 +30,24 @@ import { IRootState } from "../../../store/Root.reducer";
 //       await dispatch(getTodosAction())
 // );
 
-export async function getServerSideProps() {
-  // Fetch data from external API
-  // const data = { id: 1, title: "1" };
-  // console.log("server data", data);
-  const response = await getTodosApi();
-  // Pass data to the page via props
-  return { props: { data: response?.data } };
-}
+// export async function getServerSideProps() {
+//   const response = await getTodosApi();
+
+//   return { props: { data: response?.data } };
+// }
 
 export default function Todos({ data }: any) {
   const dispatch = useDispatch();
-  const { todos } = useSelector((store: IRootState) => store.counter);
+  const { todos, category } = useSelector((store: IRootState) => store.counter);
 
   console.log("data", data, todos);
 
-  useEffect(() => {
-    if (data) {
-      dispatch(setTodosAction(data));
-      // throw new Error("");
-    }
-  }, [data, dispatch]);
+  // useEffect(() => {
+  // if (data) {
+  // dispatch(setTodosAction(data));
+  // throw new Error("");
+  // }
+  // }, [data, dispatch]);
 
   // useEffect(() => {
   // dispatch(getTodosAction());
@@ -60,14 +59,20 @@ export default function Todos({ data }: any) {
 
       {/* <div>id: {data.id}</div> */}
 
-      <div>
-        {data.map(({ id, title }) => (
+      {/* <div>
+        {todos.map(({ id, title }) => (
           <div key={id}>
             <h6>id: {id}</h6>
             <h6>title: {title}</h6>
           </div>
         ))}
-      </div>
+      </div> */}
+
+      <ul>
+        {category.map(({ id, name }) => (
+          <li key={id}>{name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
