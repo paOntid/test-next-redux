@@ -3,15 +3,20 @@ import {
   GET_CATEGORY,
   GET_CATEGORY_SUCCESS,
   GET_CATEGORY_FAILURE,
+  GET_CURRENT_CATEGORY,
+  GET_CURRENT_CATEGORY_FAILURE,
+  GET_CURRENT_CATEGORY_SUCCESS,
+  CLEAR_CURRENT_CATEGORY,
 } from "./Category.constant";
 
 export type CategoryState = {
   category: any[];
+  subcategories: any;
 };
 
 export interface IHydrateAction {
   type: typeof HYDRATE;
-  payload: { counter: CategoryState };
+  payload: { category: CategoryState };
 }
 
 export interface IGetCategoryAction {
@@ -28,8 +33,31 @@ export interface IGetCategoryFailedAction {
   payload: any;
 }
 
+export interface IGetCurrentCategoryAction {
+  type: typeof GET_CURRENT_CATEGORY;
+  payload: string | number;
+}
+
+export interface IGetCurrentCategorySuccessAction {
+  type: typeof GET_CURRENT_CATEGORY_SUCCESS;
+  payload: any;
+}
+
+export interface IGetCurrentCategoryFailedAction {
+  type: typeof GET_CURRENT_CATEGORY_FAILURE;
+  payload: any;
+}
+
+export interface IClearCurrentCategoryAction {
+  type: typeof CLEAR_CURRENT_CATEGORY;
+}
+
 export type CategoryActionTypes =
   | IHydrateAction
   | IGetCategoryAction
   | IGetCategorySuccessAction
-  | IGetCategoryFailedAction;
+  | IGetCategoryFailedAction
+  | IGetCurrentCategoryAction
+  | IGetCurrentCategorySuccessAction
+  | IGetCurrentCategoryFailedAction
+  | IClearCurrentCategoryAction;

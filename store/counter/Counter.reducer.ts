@@ -25,9 +25,12 @@ export default function counterReducer(
       return { ...state, todos: action.payload };
     case SET_TODOS:
       return { ...state, todos: action.payload };
-    // case HYDRATE:
-    //   console.log("HYDRATE");
-    //   return { ...state, ...action.payload?.counter };
+    case HYDRATE:
+      // console.log("counter hydrate", action.payload);
+      return {
+        ...state,
+        ...action.payload?.counter,
+      };
     default:
       return { ...state };
   }

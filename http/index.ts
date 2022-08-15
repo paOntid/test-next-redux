@@ -5,3 +5,9 @@ export const getTodosApi = () =>
 
 export const getCategoryApi = () =>
   axios.get("https://api.bmethod.grdev.pw/front/category");
+
+export const getCurrentCategoryApi = (id: number | string) =>
+  axios.get(`https://api.bmethod.grdev.pw/category/${id}`);
+
+export const getUserApi = () =>
+  axios.get("https://jsonplaceholder.typicode.com/users/1");

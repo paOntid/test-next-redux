@@ -12,17 +12,13 @@ import { IRootState } from "../../../store/Root.reducer";
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    console.log("store", store);
+    const { dispatch } = store;
 
-    const { dispatch, getState } = store;
-    const response = await dispatch(getTodosAction());
-    // const response = await dispatch(getCategoryRequestAction());
+    await dispatch(getTodosAction());
     dispatch(END);
     await store.sagaTask?.toPromise();
 
-    console.log("response", response, getState());
-
-    return { props: { data: response } };
+    return { props: {} };
   }
 );
 
@@ -38,14 +34,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
 //   return { props: { data: response?.data } };
 // }
 
-export default function Todos({ data }: any) {
+export default function Todos() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { todos } = useSelector((store: IRootState) => store.counter);
 
   const goToCategory = () => router.push("/unouthorized/category");
-
-  console.log("data", data, todos);
 
   // useEffect(() => {
   // if (data) {
@@ -74,12 +68,6 @@ export default function Todos({ data }: any) {
           </div>
         ))}
       </div>
-
-      {/* <ul>
-        {category.map(({ id, name }) => (
-          <li key={id}>{name}</li>
-        ))}
-      </ul> */}
     </div>
   );
 }
